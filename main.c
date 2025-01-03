@@ -1,6 +1,14 @@
+#include <common.h>
 #include <stdio.h>
+#include <terminalManager.h>
 
 int main(void) {
-    printf("Hello, World!\n");
+    TermialInitialise();
+
+    while (!HandleTerminalEvents()) {
+
+    }
+
+    system("pause");
     return 0;
 }
