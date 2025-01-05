@@ -91,9 +91,6 @@ void RefreshUI() {
     }
 
     int HandleTerminalEvents() {
-        DWORD out;
-        //FillConsoleOutputAttribute(outputHandle, COMMON_LVB_REVERSE_VIDEO, terminalSize.x * terminalSize.y, coordZero, &out);
-
         ReadConsoleInput(inputHandle, &inputRecord, 1, &events);
         switch (inputRecord.EventType) {
             case WINDOW_BUFFER_SIZE_EVENT: {
