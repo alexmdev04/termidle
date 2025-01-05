@@ -15,23 +15,23 @@ void RefreshUI() {
     INPUT_RECORD inputRecord;
     DWORD events;
 
-void SetCursorPosition(const Vector2Int position) {
-    cursorPos = position;
-    const COORD coord = { position.x, position.y };
-    SetConsoleCursorPosition(outputHandle, coord);
-}
+    void SetCursorPosition(const Vector2Int position) {
+        cursorPos = position;
+        const COORD coord = { position.x, position.y };
+        SetConsoleCursorPosition(outputHandle, coord);
+    }
 
-void SetCurrentCursorPositionAttribute(const WORD attribute) {
-    DWORD out;
-    const COORD coord = { cursorPos.x, cursorPos.y };
-    FillConsoleOutputAttribute(outputHandle, attribute, 1, coord, &out);
-}
+    void SetCurrentCursorPositionAttribute(const WORD attribute) {
+        DWORD out;
+        const COORD coord = { cursorPos.x, cursorPos.y };
+        FillConsoleOutputAttribute(outputHandle, attribute, 1, coord, &out);
+    }
 
-void SetTerminalSize(const Vector2Int size) {
-    terminalSize = size;
-}
+    void SetTerminalSize(const Vector2Int size) {
+        terminalSize = size;
+    }
 
-/// Handles windows virtual key code events
+    /// Handles windows virtual key code events
     int HandleKeyEvent(const WORD vkey, const bool keyDown) {
         if (keyDown) {
             // apply transformation based on directional keys
