@@ -20,7 +20,7 @@
 
 
 // functions
-void TermialInitialise();
+void TerminalInitialise();
 int HandleTerminalEvents();
 void RefreshUI();
 void SetCursorPosition(Vector2Int position);

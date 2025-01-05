@@ -68,7 +68,7 @@ void SetTerminalSize(const Vector2Int size) {
     }
 
     /// Setup terminal handles, enable input, set initial terminal size
-    void TermialInitialise() {
+    void TerminalInitialise() {
 
 
         // get terminal handles
