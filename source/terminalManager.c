@@ -13,6 +13,11 @@ void RefreshUI() {
 
 }
 
+int clamp(int value, const int min, const int max) {
+    value &= -(value >= min);
+    return value | ((max - value) >> 31);
+}
+
 #if defined(WIN32)
 
     HANDLE outputHandle;
@@ -20,10 +25,11 @@ void RefreshUI() {
     INPUT_RECORD inputRecord;
     DWORD events;
 
-    void SetCursorPosition(const Vector2Int position) {
+    void SetCursorPosition(Vector2Short position) {
+        position.x = clamp(position.x, 0, terminalSize.x);
+        position.y = clamp(position.y, 0, terminalSize.y);
         cursorPos = position;
-        const COORD coord = { position.x, position.y };
-        SetConsoleCursorPosition(outputHandle, coord);
+        SetConsoleCursorPosition(outputHandle, Vector2Short_to_COORD position);
     }
 
     void SetCurrentCursorPositionAttribute(const WORD attribute) {
@@ -50,11 +56,11 @@ void RefreshUI() {
                     break;
                 }
                 case VK_LEFT: {
-                    pos.x--;
+                    pos.x -= 2;
                     break;
                 }
                 case VK_RIGHT: {
-                    pos.x++;
+                    pos.x += 2;
                     break;
                 }
                 case VK_ESCAPE: {
@@ -73,8 +79,6 @@ void RefreshUI() {
 
     /// Setup terminal handles, enable input, set initial terminal size
     void TerminalInitialise() {
-
-
         // get terminal handles
         outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
         inputHandle = GetStdHandle(STD_INPUT_HANDLE);
@@ -82,8 +86,8 @@ void RefreshUI() {
         // set console mode to allow input reading
         constexpr DWORD inputMode = ENABLE_WINDOW_INPUT;
         SetConsoleMode(inputHandle, inputMode);
-        constexpr DWORD outputMode = ENABLE_VIRTUAL_TERMINAL_PROCESSING | ENABLE_PROCESSED_OUTPUT;
-        SetConsoleMode(outputHandle, outputMode);
+        //constexpr DWORD outputMode = ENABLE_VIRTUAL_TERMINAL_PROCESSING | ENABLE_PROCESSED_OUTPUT;
+        //SetConsoleMode(outputHandle, outputMode);
 
         // set initial terminal size
         CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -106,6 +110,10 @@ void RefreshUI() {
             }
             default: return 0;
         }
+    }
+
+    void DrawRect() {
+
     }
 
 #elif defined (UNIX)
