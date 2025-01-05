@@ -1,7 +1,12 @@
 #include <terminalManager.h>
 
-Vector2Int terminalSize;
-Vector2Int cursorPos;
+/// Converts a COORD value into a Vector2Short value
+#define COORD_to_Vector2Short *(struct s_vec2int16*)&
+/// Converts a Vector2Short value into a COORD value by getting its address, casting it to COORD and dereferencing the address.
+#define Vector2Short_to_COORD *(struct _COORD*)&
+
+Vector2Short terminalSize;
+Vector2Short cursorPos;
 const COORD coordZero = { 0,0 };
 
 void RefreshUI() {
@@ -23,11 +28,10 @@ void RefreshUI() {
 
     void SetCurrentCursorPositionAttribute(const WORD attribute) {
         DWORD out;
-        const COORD coord = { cursorPos.x, cursorPos.y };
-        FillConsoleOutputAttribute(outputHandle, attribute, 1, coord, &out);
+        FillConsoleOutputAttribute(outputHandle, attribute, 2, Vector2Short_to_COORD cursorPos, &out);
     }
 
-    void SetTerminalSize(const Vector2Int size) {
+    void SetTerminalSize(const Vector2Short size) {
         terminalSize = size;
     }
 
@@ -35,7 +39,7 @@ void RefreshUI() {
     int HandleKeyEvent(const WORD vkey, const bool keyDown) {
         if (keyDown) {
             // apply transformation based on directional keys
-            Vector2Int pos = cursorPos;
+            Vector2Short pos = cursorPos;
             switch (vkey) {
                 case VK_UP: {
                     pos.y--;
@@ -84,10 +88,8 @@ void RefreshUI() {
         // set initial terminal size
         CONSOLE_SCREEN_BUFFER_INFO csbi;
         GetConsoleScreenBufferInfo(outputHandle, &csbi);
-        terminalSize.x = csbi.dwSize.X;
-        terminalSize.y = csbi.dwSize.Y;
-        cursorPos.x = csbi.dwCursorPosition.X;
-        cursorPos.y = csbi.dwCursorPosition.Y;
+        terminalSize = COORD_to_Vector2Short csbi.dwSize;
+        cursorPos = COORD_to_Vector2Short csbi.dwCursorPosition;
     }
 
     int HandleTerminalEvents() {

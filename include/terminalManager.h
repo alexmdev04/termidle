@@ -23,12 +23,12 @@
 void TerminalInitialise();
 int HandleTerminalEvents();
 void RefreshUI();
-void SetCursorPosition(Vector2Int position);
-void SetTerminalSize(Vector2Int size);
+void SetCursorPosition(Vector2Short position);
+void SetTerminalSize(Vector2Short size);
 
 // global vars
-extern Vector2Int terminalSize;
-extern Vector2Int cursorPos;
+extern Vector2Short terminalSize;
+extern Vector2Short cursorPos;
 extern const COORD coordZero;
 
 
